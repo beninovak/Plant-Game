@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8713422217423699368}
   m_Layer: 0
-  m_Name: KanglaSpawnPointRight
+  m_Name: SpawnPointRightHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 177250263091227407}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.055, y: -0.067, z: 0}
+  m_LocalPosition: {x: 0.49, y: -0.61, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -43,9 +43,9 @@ GameObject:
   - component: {fileID: 6489660102573005671}
   - component: {fileID: 1188734325598770877}
   - component: {fileID: 7525411013374891306}
-  - component: {fileID: 7146843186227379179}
   - component: {fileID: -120404740181100530}
   - component: {fileID: 918654052806314409}
+  - component: {fileID: 6093935919617088878}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -63,7 +63,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.36943302, y: 1.2444196, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7232896057892421142}
@@ -121,13 +121,13 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 20
   m_Sprite: {fileID: 6534586468793201136, guid: 972104236a9ae0849ba6d4db105bde16, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.17, y: 0.3}
+  m_Size: {x: 1.630245, y: 2.8400002}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -171,36 +171,14 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.17, y: 0.3}
-    newSize: {x: 0.17, y: 0.3}
+    oldSize: {x: 1.63, y: 2.84}
+    newSize: {x: 1.630245, y: 2.8400002}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Size: {x: 0.11220091, y: 0.021444827}
   m_EdgeRadius: 0
---- !u!95 &7146843186227379179
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1684925212741263195}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0d4d9149a55f4cd4080129cff4130d87, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &-120404740181100530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,12 +191,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a57d9697f05d3a74884d16cb2ad64b68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 7146843186227379179}
+  animator: {fileID: 6093935919617088878}
+  spawnPointLeftHand: {fileID: 3170906085887209667}
+  spawnPointRightHand: {fileID: 177250263091227407}
   kangla: {fileID: 1508177720322291172, guid: b05c0b8895ef6e34681db13b2f361e4a, type: 3}
-  kanglaSpawnPointLeft: {fileID: 3170906085887209667}
-  kanglaSpawnPointRight: {fileID: 177250263091227407}
-  kanglaController: {fileID: 0}
-  activeItem: 
+  shit: {fileID: 1914011167765928007, guid: a8162324aecd3e94c9fadfd2ef7ee106, type: 3}
+  activeItem: {fileID: 0}
 --- !u!50 &918654052806314409
 Rigidbody2D:
   serializedVersion: 4
@@ -244,8 +222,30 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!95 &6093935919617088878
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1684925212741263195}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: dbd73af84a6a1e04f8a096a2880469b7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3170906085887209667
 GameObject:
   m_ObjectHideFlags: 0
@@ -256,7 +256,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7232896057892421142}
   m_Layer: 0
-  m_Name: KanglaSpawnPointLeft
+  m_Name: SpawnPointLeftHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -271,7 +271,7 @@ Transform:
   m_GameObject: {fileID: 3170906085887209667}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.08, y: -0.067, z: 0}
+  m_LocalPosition: {x: -0.73, y: -0.63, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
