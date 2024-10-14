@@ -1,14 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class PlayerController : MonoBehaviour {
 
     public struct InventoryItem {
         public byte count;
         public GameObject item;
-        public bool hasBeenSpawned;
     }
     
     [Header ("General")]
@@ -22,7 +23,6 @@ public class PlayerController : MonoBehaviour {
     public GameObject kangla;
     public GameObject shit;
     
-    
     [HideInInspector]
     public GameObject activeItem;
     private SpriteRenderer activeItemSpriteRenderer;
@@ -30,14 +30,12 @@ public class PlayerController : MonoBehaviour {
     public Dictionary<string, InventoryItem> inventory = new Dictionary<string, InventoryItem>();
 
     private void Awake() {
-        // activeItem = new GameObject();
-        // activeItemSpriteRenderer = new SpriteRenderer();
-        inventory.Add("kangla", new InventoryItem() { count = 1, item = kangla, hasBeenSpawned = false } );
+        inventory.Add("kangla", new InventoryItem() { count = 1, item = kangla } );
     }
 
-    private void Start() {
-        // InvokeRepeating("PrintInventory", 1f, 2f);
-    }
+    // private void Start() {
+    //     InvokeRepeating("PrintInventory", 1f, 2f);
+    // }
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.Q)) {
@@ -92,46 +90,31 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private void EquipItem(string name) {
-
-        // string output = "";
-        // foreach (var item in inventory) {
-        //     output += $"{item.Key} ";
-        // }
-        // Debug.Log(output);
-        
-        var inventoryItem = inventory[name];
-        Debug.Log(inventoryItem.count);
-        Debug.Log(inventoryItem.hasBeenSpawned);
-        if (inventoryItem.hasBeenSpawned == false) {
-            if (horizontalMove <= 0) {
-                // Debug.Log(inventoryItem);
-                activeItem = Instantiate(inventoryItem.item, spawnPointLeftHand.transform.position, Quaternion.identity, spawnPointLeftHand.transform);
-            } else {
-                activeItem = Instantiate(inventoryItem.item, spawnPointRightHand.transform.position, Quaternion.identity, spawnPointRightHand.transform);
-            }
-
-            activeItem.AddComponent<ItemController>().name = name;
-            inventoryItem.hasBeenSpawned = true;
-            // activeItem.SetActive(true);
-        } else {
-            ItemController[] items = FindObjectsByType<ItemController>(FindObjectsSortMode.None);
-            foreach (var item in items) {
-                if (item.name == name) {
-                    Debug.Log($"Found item with name {name}");
-                    activeItem = item.gameObject;
-                }
-            }
+    public void ActiveItemInventoryUpdate() {
+        if (activeItem) {
+            string activeItemName = activeItem.GetComponent<ItemController>().name;
+            var tempItem = inventory[activeItemName];
+            tempItem.item = activeItem;
+            inventory[activeItemName] = tempItem;
         }
-        
-        inventory[name] = inventoryItem;
+    }
+
+    private void EquipItem(string name) {
+        UnEquipItems();
+        Debug.Log(name);
+        if (horizontalMove <= 0) {
+            activeItem = Instantiate(inventory[name].item, spawnPointLeftHand.transform.position, Quaternion.identity, spawnPointLeftHand.transform);
+        } else {
+            activeItem = Instantiate(inventory[name].item, spawnPointRightHand.transform.position, Quaternion.identity, spawnPointRightHand.transform);
+        }
+        activeItem.AddComponent<ItemController>().name = name;
         activeItemSpriteRenderer = activeItem.GetComponent<SpriteRenderer>();
     }
 
     private void UnEquipItems() {
         if (activeItem) {
-            activeItem = null;
-            activeItemSpriteRenderer.sprite = null;
+            // activeItem.SetActive(false);
+            Destroy(activeItem);
         }
     }
 
