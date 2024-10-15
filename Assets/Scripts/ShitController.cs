@@ -19,19 +19,18 @@ public class ShitController : MonoBehaviour {
     }
 
     private void OnMouseDown() {
-        playerInventory = playerController.inventory;
-        
         float distanceFromPlayer = Vector2.Distance(player.transform.position, transform.position);
-        if (distanceFromPlayer <= 2f) { // Magic number
-            if (!playerInventory.ContainsKey("shit")) {
-                playerInventory.Add("shit", new PlayerController.InventoryItem() { count = 1, item = shit } );
-            } else {
-                var shitItem = playerInventory["shit"];
-                shitItem.count++;
-                playerInventory["shit"] = shitItem;
-            }
-            Destroy(gameObject);
+        if (distanceFromPlayer > 2f) return; // Magic number
+        
+        playerInventory = playerController.inventory;
+        if (!playerInventory.ContainsKey("shit")) {
+            playerInventory.Add("shit", new PlayerController.InventoryItem() { count = 1, item = shit } );
+        } else {
+            var shitItem = playerInventory["shit"];
+            shitItem.count++;
+            playerInventory["shit"] = shitItem;
         }
+        Destroy(gameObject);
     }
 
     private void OnMouseOver() {

@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameController : MonoBehaviour {
-    public GameObject water;
-    public GameObject player, cow;
+    public GameObject player, cow, pumpkin;
     public GameObject playerSpawnPoint, cowSpawnPoint;
+    private GameObject[] pumpkinSpawnPoints;
+
+    public WaterController waterController;
     void Awake() {
         GameObject spawnedPlayer = Instantiate(player, playerSpawnPoint.transform.position, Quaternion.identity);
         PlayerController playerController = spawnedPlayer.GetComponent<PlayerController>();
         
-        WaterController waterController = water.GetComponent<WaterController>();
         waterController.player = spawnedPlayer;
         waterController.playerController = playerController;
         
@@ -18,5 +19,10 @@ public class GameController : MonoBehaviour {
         CowController cowController = spawnedCow.GetComponent<CowController>();
         cowController.player = spawnedPlayer;
         cowController.playerController = playerController;
+
+        pumpkinSpawnPoints = GameObject.FindGameObjectsWithTag("PumpkinSpawnPoint");
+        foreach (GameObject spawnPoint in pumpkinSpawnPoints) {
+            Instantiate(pumpkin, spawnPoint.transform.position, Quaternion.identity, spawnPoint.transform);
+        }
     }
 }

@@ -12,7 +12,7 @@ public class WaterController : MonoBehaviour {
         if (playerController.activeItem && playerController.activeItem.GetComponent<ItemController>().name == "kangla") {
             float distanceFromPlayer = Vector2.Distance(player.transform.position, transform.position);
             if (distanceFromPlayer <= 6f) { // Magic number
-                playerController.activeItem.GetComponent<KanglaController>().makeKanglaFull();
+                playerController.activeItem.GetComponent<KanglaController>().MakeKanglaFull();
                 playerController.ActiveItemInventoryUpdate();
             }
         }

@@ -17,7 +17,7 @@ public class CowController : MonoBehaviour {
     }
 
     private void MakeCowShit() {
-        Vector2 offset = new Vector2(Random.Range(-1f, 1f), Random.Range(-0.5f, 0.5f));
+        Vector2 offset = new Vector2(Random.Range(-2f, 2f), Random.Range(-1f, 1f));
         GameObject spawnedShit = Instantiate(shit, (Vector2)shitSpawnPoint.transform.position + offset, Quaternion.identity, shitSpawnPoint.transform);
         ShitController shitController = spawnedShit.GetComponent<ShitController>(); 
         shitController.shit = shit;

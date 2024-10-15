@@ -25,17 +25,25 @@ public class PlayerController : MonoBehaviour {
     
     [HideInInspector]
     public GameObject activeItem;
+    public string activeItemName = "";
+
     private SpriteRenderer activeItemSpriteRenderer;
     
+    // TODO - Should item have a general "properties" field, which would allow accesing custom item methods...E.g. MakeKanglaFull()??  
     public Dictionary<string, InventoryItem> inventory = new Dictionary<string, InventoryItem>();
 
     private void Awake() {
         inventory.Add("kangla", new InventoryItem() { count = 1, item = kangla } );
     }
 
-    // private void Start() {
-    //     InvokeRepeating("PrintInventory", 1f, 2f);
-    // }
+    private void Start() {
+        GameObject[] plants = GameObject.FindGameObjectsWithTag("Plant");
+        foreach (GameObject plant in plants) {
+            plant.GetComponent<PlantController>().player = gameObject;
+            plant.GetComponent<PlantController>().playerController = this;
+        }
+        // InvokeRepeating("PrintInventory", 1f, 2f);
+    }
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.Q)) {
@@ -92,21 +100,21 @@ public class PlayerController : MonoBehaviour {
 
     public void ActiveItemInventoryUpdate() {
         if (activeItem) {
-            string activeItemName = activeItem.GetComponent<ItemController>().name;
-            var tempItem = inventory[activeItemName];
+            string _activeItemName = activeItem.GetComponent<ItemController>().name;
+            var tempItem = inventory[_activeItemName];
             tempItem.item = activeItem;
-            inventory[activeItemName] = tempItem;
+            inventory[_activeItemName] = tempItem;
         }
     }
 
     private void EquipItem(string name) {
         UnEquipItems();
-        Debug.Log(name);
         if (horizontalMove <= 0) {
             activeItem = Instantiate(inventory[name].item, spawnPointLeftHand.transform.position, Quaternion.identity, spawnPointLeftHand.transform);
         } else {
             activeItem = Instantiate(inventory[name].item, spawnPointRightHand.transform.position, Quaternion.identity, spawnPointRightHand.transform);
         }
+        activeItemName = name;
         activeItem.AddComponent<ItemController>().name = name;
         activeItemSpriteRenderer = activeItem.GetComponent<SpriteRenderer>();
     }
