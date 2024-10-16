@@ -101,14 +101,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f90f1791e2b4d1747ba632ee5b84fc29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kanglaCursor: {fileID: 2800000, guid: 3de79bb2019ced24982ec35bc768149d, type: 3}
+  groundSpriteRenderer: {fileID: 2642382784541725711}
+  spriteSeed: {fileID: 21300000, guid: 6c6fe6c2a1bf9844eb40f5ca87b36f1d, type: 3}
+  spriteSeedDead: {fileID: 21300000, guid: f89365af505a90343b86f1f161c7150e, type: 3}
+  spritePumpkin: {fileID: 21300000, guid: e9c91646cc4ddb54486c01794b118533, type: 3}
+  spritePumpkinDead: {fileID: 21300000, guid: b81c0e40cbf81394d8bc750818a7292b, type: 3}
+  hoeCursor: {fileID: 2800000, guid: a672682342f077e4380e0e9a7a4567e1, type: 3}
   shitCursor: {fileID: 2800000, guid: 1cea322fe5439c44f8c4bd7e44346350, type: 3}
-  seed: {fileID: 21300000, guid: 6c6fe6c2a1bf9844eb40f5ca87b36f1d, type: 3}
-  spriteDead: {fileID: 21300000, guid: b81c0e40cbf81394d8bc750818a7292b, type: 3}
-  spriteAlive: {fileID: 21300000, guid: e9c91646cc4ddb54486c01794b118533, type: 3}
-  waterSpriteRenderer: {fileID: 2642382784541725711}
+  kanglaCursor: {fileID: 2800000, guid: 3de79bb2019ced24982ec35bc768149d, type: 3}
   player: {fileID: 0}
   playerController: {fileID: 0}
+  gameController: {fileID: 0}
 --- !u!61 &-6503711386090773131
 BoxCollider2D:
   m_ObjectHideFlags: 0

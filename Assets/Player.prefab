@@ -196,7 +196,9 @@ MonoBehaviour:
   spawnPointRightHand: {fileID: 177250263091227407}
   kangla: {fileID: 1508177720322291172, guid: b05c0b8895ef6e34681db13b2f361e4a, type: 3}
   shit: {fileID: 1914011167765928007, guid: a8162324aecd3e94c9fadfd2ef7ee106, type: 3}
+  hoe: {fileID: 1208996779799695921, guid: 1f86998c9890ae14cb41a972a71e62c5, type: 3}
   activeItem: {fileID: 0}
+  activeItemName: 
 --- !u!50 &918654052806314409
 Rigidbody2D:
   serializedVersion: 4

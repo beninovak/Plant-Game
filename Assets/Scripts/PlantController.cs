@@ -6,15 +6,22 @@ using Random = UnityEngine.Random;
 
 public class PlantController : MonoBehaviour {
 
-    public Texture2D kanglaCursor, shitCursor;
-    public Sprite seed, spriteDead, spriteAlive;
-    public SpriteRenderer waterSpriteRenderer;
+    [Header("Sprites")]
+    public SpriteRenderer groundSpriteRenderer;
+    public Sprite spriteSeed, spriteSeedDead, spritePumpkin, spritePumpkinDead;
+
+    [Header("Cursors")]
+    public Texture2D hoeCursor;
+    public Texture2D shitCursor;
+    public Texture2D kanglaCursor;
 
     [HideInInspector] 
     public GameObject player;
     [HideInInspector]
     public PlayerController playerController;
-
+    [HideInInspector]
+    public GameController gameController;
+    
     private enum STATE {
         SEED,
         DEAD,
@@ -45,9 +52,9 @@ public class PlantController : MonoBehaviour {
         
         if (currentState == STATE.SEED) {
             if (isWatered && timeSinceWatered >= 10.0f) { // TODO - change to 60.0f
-                waterSpriteRenderer.color = new Color(0.043f, 0.435f, 0.780f, 0.7f);
+                groundSpriteRenderer.color = new Color(0.043f, 0.435f, 0.780f, 0.7f);
                 if (timeSinceWatered > 20.0f) {
-                    waterSpriteRenderer.color = new Color(0.043f, 0.435f, 0.780f, 0.3f);
+                    groundSpriteRenderer.color = new Color(0.043f, 0.435f, 0.780f, 0.3f);
 
                     if (timeSinceWatered > 30.0f) {
                         KillSelf(DEATH_REASON.NOT_ENOUGH_WATER);
@@ -68,8 +75,8 @@ public class PlantController : MonoBehaviour {
                     case >= 3:
                         if (!isWatered) break;
                         currentState = STATE.ALIVE;
-                        spriteRenderer.sprite = spriteAlive;
-                        waterSpriteRenderer.color = new Color(0f, 0f, 0f, 0f);
+                        spriteRenderer.sprite = spritePumpkin;
+                        groundSpriteRenderer.color = new Color(0f, 0f, 0f, 0f);
                         break;
                 }
             }
@@ -87,41 +94,58 @@ public class PlantController : MonoBehaviour {
     }
     
     private void HarvestSelf() {
+        isWatered = false;
         timeSinceWatered = 0f;
+        isFertilized = false;
         timesFertilized = 0;
         timeSinceFertilized = 0f;
+        timeSinceCropAvailable = 0f;
         currentState = STATE.SEED;
-        
+        spriteRenderer.sprite = spriteSeed;
+
+        gameController.AddPumpkin();
+        Debug.Log($"Pumpkin count: {gameController.pumpkinCount}");
         // TODO - Give player pumpkin + drop seed
     }
 
     private void KillSelf(DEATH_REASON deathReason) {
+        Debug.Log($"{gameObject.name} DIED CUZ {deathReason}. State on death: {currentState}");
         isWatered = false;
         timeSinceWatered = 0f;
         timesFertilized = 0;
         timeSinceFertilized = 0f;
+        
+        switch (currentState) {
+            case STATE.SEED:
+                spriteRenderer.sprite = spriteSeedDead;
+                break;
+            
+            case STATE.ALIVE:
+                spriteRenderer.sprite = spritePumpkinDead;
+                break;
+        }
+        
         currentState = STATE.DEAD;
-        spriteRenderer.sprite = spriteDead;
 
-        waterSpriteRenderer.color = new Color(0f, 0f, 0f, 0f);
-        Debug.Log($"Plant {gameObject.name} DIED CUZ {deathReason}");
+        groundSpriteRenderer.color = new Color(0.352f, 0.156f, 0.101f, 1f);
         // TODO - Write deathReason above pumpkin
     }
     
     private void OnMouseDown() {
-        if (!playerController.activeItem) return;
+        if (!playerController.activeItem || currentState == STATE.DEAD) return;
         
+        // TODO - add click particle effect
         float distanceFromPlayer = Vector2.Distance(player.transform.position, transform.position);
         if (distanceFromPlayer > 2f) return;
         
         string usedItem = playerController.activeItemName;
-        //Debug.Log($"CLICKING PLANT WITH {usedItem}");
 
         switch (usedItem) {
             case "kangla":
                 KanglaController controller = playerController.activeItem.GetComponent<KanglaController>();
                 if (!controller.IsUsable()) break;
-                
+                controller.Use();
+
                 if (isWatered && timeSinceWatered < 10.0f) {
                     KillSelf(DEATH_REASON.TOO_MUCH_WATER);
                     break;
@@ -129,8 +153,7 @@ public class PlantController : MonoBehaviour {
                 
                 isWatered = true;
                 timeSinceWatered = 0f;
-                waterSpriteRenderer.color = new Color(0.043f, 0.435f, 0.780f, 1f);
-                controller.Use();
+                groundSpriteRenderer.color = new Color(0.043f, 0.435f, 0.780f, 1f);
                 break;
             
             case "shit":
@@ -139,7 +162,7 @@ public class PlantController : MonoBehaviour {
                 timeSinceFertilized = 0f;
                 break;
             
-            case "plow":
+            case "hoe":
                 if (currentState == STATE.ALIVE) {
                     HarvestSelf();
                 }
@@ -160,6 +183,10 @@ public class PlantController : MonoBehaviour {
             
             case "shit":
                 Cursor.SetCursor(shitCursor, Vector2.zero, CursorMode.Auto);
+                break;
+            
+            case "hoe":
+                Cursor.SetCursor(hoeCursor, Vector2.zero, CursorMode.Auto);
                 break;
         }
     }

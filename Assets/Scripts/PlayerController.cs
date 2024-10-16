@@ -19,12 +19,13 @@ public class PlayerController : MonoBehaviour {
     private float horizontalMove;
     public GameObject spawnPointLeftHand, spawnPointRightHand;
 
-    [Header ("Available items")]
-    public GameObject kangla;
+    [Header("Available items")] public GameObject kangla;
     public GameObject shit;
+    public GameObject hoe;
     
     [HideInInspector]
     public GameObject activeItem;
+    [HideInInspector]
     public string activeItemName = "";
 
     private SpriteRenderer activeItemSpriteRenderer;
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour {
 
     private void Awake() {
         inventory.Add("kangla", new InventoryItem() { count = 1, item = kangla } );
+        inventory.Add("hoe", new InventoryItem() { count = 1, item = hoe } );
     }
 
     private void Start() {
@@ -54,6 +56,8 @@ public class PlayerController : MonoBehaviour {
             EquipItem("kangla");
         } else if (Input.GetKeyDown(KeyCode.Alpha2) && inventory.ContainsKey("shit")) {
             EquipItem("shit");
+        } else if (Input.GetKeyDown(KeyCode.Alpha3) && inventory.ContainsKey("hoe")) {
+            EquipItem("hoe");
         }
     }
 
