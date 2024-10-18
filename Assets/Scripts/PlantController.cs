@@ -28,11 +28,12 @@ public class PlantController : MonoBehaviour {
         ALIVE
     };
 
-    private enum DEATH_REASON {
+    public enum DEATH_REASON {
         UNHARVESTED,
         UNFERTILIZED,
         TOO_MUCH_WATER,
         NOT_ENOUGH_WATER,
+        EATEN_BY_WILD_SWINE,
     };
 
     private bool isWatered = false;
@@ -104,11 +105,10 @@ public class PlantController : MonoBehaviour {
         spriteRenderer.sprite = spriteSeed;
 
         gameController.AddPumpkin();
-        Debug.Log($"Pumpkin count: {gameController.pumpkinCount}");
         // TODO - Give player pumpkin + drop seed
     }
 
-    private void KillSelf(DEATH_REASON deathReason) {
+    public void KillSelf(DEATH_REASON deathReason) {
         Debug.Log($"{gameObject.name} DIED CUZ {deathReason}. State on death: {currentState}");
         isWatered = false;
         timeSinceWatered = 0f;

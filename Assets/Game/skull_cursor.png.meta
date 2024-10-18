@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: d461d5d85a77f6543bdffef4421e1aa8
+guid: 90270028a2e50974f97f4e6653115e34
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6168083732550661486
-    second: cow_0
+      213: 8253728718569065884
+    second: skull_cursor_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -24,7 +24,7 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
     flipGreenChannel: 0
-  isReadable: 0
+  isReadable: 1
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -57,7 +57,7 @@ TextureImporter:
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
-  textureType: 8
+  textureType: 7
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: cow_0
+      name: skull_cursor_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 392
-        height: 404
+        width: 96
+        height: 125
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -114,8 +114,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e653c8f897f699550800000000000000
-      internalID: 6168083732550661486
+      spriteID: c9dcfb61a822b8270800000000000000
+      internalID: 8253728718569065884
       vertices: []
       indices: 
       edges: []
@@ -130,8 +130,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      cow_0: 6168083732550661486
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

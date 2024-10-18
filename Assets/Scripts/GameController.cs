@@ -6,11 +6,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GameController : MonoBehaviour {
-    public GameObject player, cow, pumpkin;
+    public GameObject player, cow, pumpkin, pig;
     public GameObject playerSpawnPoint, cowSpawnPoint;
-    private GameObject[] pumpkinSpawnPoints;
+    private GameObject[] pumpkinSpawnPoints, pigSpawnPoints;
 
     [HideInInspector]
     public int pumpkinCount;
@@ -22,11 +23,14 @@ public class GameController : MonoBehaviour {
     public Image finalMessageTextBg;
     public TextMeshProUGUI finalMessageText;
     public GameObject startingPanel;
-    
+
+    private List<GameObject> spawnedPumpkins;
+
+    private PlayerController playerController;
     
     void Awake() {
         GameObject spawnedPlayer = Instantiate(player, playerSpawnPoint.transform.position, Quaternion.identity);
-        PlayerController playerController = spawnedPlayer.GetComponent<PlayerController>();
+        playerController = spawnedPlayer.GetComponent<PlayerController>();
         
         waterController.player = spawnedPlayer;
         waterController.playerController = playerController;
@@ -37,10 +41,18 @@ public class GameController : MonoBehaviour {
         cowController.playerController = playerController;
         
         pumpkinSpawnPoints = GameObject.FindGameObjectsWithTag("PumpkinSpawnPoint");
+        spawnedPumpkins = new List<GameObject>();
+        int count = 1;
         foreach (GameObject spawnPoint in pumpkinSpawnPoints) {
             GameObject spawnedPumpkin = Instantiate(pumpkin, spawnPoint.transform.position, Quaternion.identity, spawnPoint.transform);
+            spawnedPumpkin.name = $"Pumpkin {count}";
             spawnedPumpkin.GetComponent<PlantController>().gameController = this;
+            spawnedPumpkins.Add(spawnedPumpkin);
+            count++;
         }
+        
+        pigSpawnPoints = GameObject.FindGameObjectsWithTag("PigSpawnPoint");
+        InvokeRepeating("AttemptPigSpawn", 3f, 0.5f);
         
         if (Vars.GAME_LOADED_COUNT < 0) { // TODO - change to == 0
             startingPanel.SetActive(true);
@@ -66,7 +78,27 @@ public class GameController : MonoBehaviour {
         pumpkinCount++;
         pumpkinCountText.text = "Pumpkin count: " + pumpkinCount;
     }
-    
+
+    private void AttemptPigSpawn() {
+        float num = Random.Range(0f, 1f);
+        if (num % 0.1f < 0.01f) {
+            int pspIndex = Random.Range(0, pigSpawnPoints.Length);
+            GameObject spawnPoint = pigSpawnPoints[pspIndex];
+
+            if (spawnedPumpkins.Count > 0) {
+                int spIndex = Random.Range(0, spawnedPumpkins.Count);
+                GameObject pumpkinToAttack = spawnedPumpkins[spIndex];
+                spawnedPumpkins.RemoveAt(spIndex);
+            
+                GameObject spawnedPig = Instantiate(pig, spawnPoint.transform.position, Quaternion.identity);
+                PigController pigController = spawnedPig.GetComponent<PigController>(); 
+                pigController.pumpkinToAttack = pumpkinToAttack;
+                pigController.player = player;
+                pigController.playerController = playerController;   
+            }
+        }
+    }
+
     public void CashOut() {
         if (Mathf.Abs(pumpkinCount) == 0) {
             finalMessageText.enabled = true;
