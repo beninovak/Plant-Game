@@ -24,7 +24,7 @@ public class ShitController : MonoBehaviour {
         
         playerInventory = playerController.inventory;
         if (!playerInventory.ContainsKey("shit")) {
-            playerInventory.Add("shit", new PlayerController.InventoryItem() { count = 1, item = shit } );
+            playerInventory.Add("shit", new PlayerController.InventoryItem() { count = 1, item = shit, isInstantiated = false, isPermanent = false } );
         } else {
             var shitItem = playerInventory["shit"];
             shitItem.count++;

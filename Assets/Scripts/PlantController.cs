@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -21,6 +22,8 @@ public class PlantController : MonoBehaviour {
     public PlayerController playerController;
     [HideInInspector]
     public GameController gameController;
+
+    public TextMeshPro deathReasonText;
     
     private enum STATE {
         SEED,
@@ -109,7 +112,6 @@ public class PlantController : MonoBehaviour {
     }
 
     public void KillSelf(DEATH_REASON deathReason) {
-        Debug.Log($"{gameObject.name} DIED CUZ {deathReason}. State on death: {currentState}");
         isWatered = false;
         timeSinceWatered = 0f;
         timesFertilized = 0;
@@ -128,11 +130,28 @@ public class PlantController : MonoBehaviour {
         currentState = STATE.DEAD;
 
         groundSpriteRenderer.color = new Color(0.352f, 0.156f, 0.101f, 1f);
-        // TODO - Write deathReason above pumpkin
+        deathReasonText.text = $"Died because:\n {deathReason}";
+        Invoke("RemoveDeathReason", 2f);
+    }
+
+    private void RemoveDeathReason() {
+        Destroy(deathReasonText);
+    }
+    
+    private void UpdatePlayerItemCount(string itemName) {
+        var item = playerController.inventory[itemName];
+        item.count--;
+        playerController.inventory[itemName] = item;
+
+        if (item.count <= 0) {
+            playerController.UnEquipItems();
+        } else {
+            playerController.itemCounter.text = item.count.ToString();
+        }
     }
     
     private void OnMouseDown() {
-        if (!playerController.activeItem || currentState == STATE.DEAD) return;
+        if (!playerController.activeItem || playerController.inventory[playerController.activeItemName].count <= 0 || currentState == STATE.DEAD) return;
         
         // TODO - add click particle effect
         float distanceFromPlayer = Vector2.Distance(player.transform.position, transform.position);
@@ -142,10 +161,11 @@ public class PlantController : MonoBehaviour {
 
         switch (usedItem) {
             case "kangla":
-                KanglaController controller = playerController.activeItem.GetComponent<KanglaController>();
-                if (!controller.IsUsable()) break;
-                controller.Use();
+                KanglaController kanglaController = playerController.activeItem.GetComponent<KanglaController>();
+                if (!kanglaController.IsUsable()) break;
+                kanglaController.Use();
 
+                UpdatePlayerItemCount(usedItem);
                 if (isWatered && timeSinceWatered < 10.0f) {
                     KillSelf(DEATH_REASON.TOO_MUCH_WATER);
                     break;
@@ -160,12 +180,14 @@ public class PlantController : MonoBehaviour {
                 isFertilized = true;
                 timesFertilized++;
                 timeSinceFertilized = 0f;
+                UpdatePlayerItemCount(usedItem);
                 break;
             
             case "hoe":
                 if (currentState == STATE.ALIVE) {
                     HarvestSelf();
                 }
+                UpdatePlayerItemCount(usedItem);
                 break;
             
             default:

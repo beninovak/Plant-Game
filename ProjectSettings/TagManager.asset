@@ -8,6 +8,7 @@ TagManager:
   - Plant
   - PumpkinSpawnPoint
   - PigSpawnPoint
+  - CowSpawnPoint
   layers:
   - Default
   - TransparentFX

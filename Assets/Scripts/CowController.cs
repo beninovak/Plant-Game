@@ -11,14 +11,15 @@ public class CowController : MonoBehaviour {
     [HideInInspector]
     public PlayerController playerController;
     
-    private void Start()
-    {
-        InvokeRepeating("MakeCowShit", 3f, 5f);
+    private void Start() {
+        float time = Vars.GAME_LOADED_COUNT > 0 ? 3f : 13f;
+        InvokeRepeating("MakeCowShit", time, 5f);
     }
 
     private void MakeCowShit() {
         Vector2 offset = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
         GameObject spawnedShit = Instantiate(shit, (Vector2)shitSpawnPoint.transform.position + offset, Quaternion.identity, shitSpawnPoint.transform);
+        spawnedShit.SetActive(true);
         ShitController shitController = spawnedShit.GetComponent<ShitController>(); 
         shitController.shit = shit;
         shitController.player = player;

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,8 +11,8 @@ using Random = UnityEngine.Random;
 
 public class GameController : MonoBehaviour {
     public GameObject player, cow, pumpkin, pig;
-    public GameObject playerSpawnPoint, cowSpawnPoint;
-    private GameObject[] pumpkinSpawnPoints, pigSpawnPoints;
+    public GameObject playerSpawnPoint;
+    private GameObject[] pumpkinSpawnPoints, pigSpawnPoints, cowSpawnPoints;
 
     [HideInInspector]
     public int pumpkinCount;
@@ -34,11 +35,14 @@ public class GameController : MonoBehaviour {
         
         waterController.player = spawnedPlayer;
         waterController.playerController = playerController;
-        
-        GameObject spawnedCow = Instantiate(cow, cowSpawnPoint.transform.position, Quaternion.identity);
-        CowController cowController = spawnedCow.GetComponent<CowController>();
-        cowController.player = spawnedPlayer;
-        cowController.playerController = playerController;
+
+        cowSpawnPoints = GameObject.FindGameObjectsWithTag("CowSpawnPoint");
+        foreach (GameObject cowSpawnPoint in cowSpawnPoints) {
+            GameObject spawnedCow = Instantiate(cow, cowSpawnPoint.transform.position, Quaternion.identity);
+            CowController cowController = spawnedCow.GetComponent<CowController>();
+            cowController.player = spawnedPlayer;
+            cowController.playerController = playerController;
+        }
         
         pumpkinSpawnPoints = GameObject.FindGameObjectsWithTag("PumpkinSpawnPoint");
         spawnedPumpkins = new List<GameObject>();
@@ -50,11 +54,12 @@ public class GameController : MonoBehaviour {
             spawnedPumpkins.Add(spawnedPumpkin);
             count++;
         }
-        
+
         pigSpawnPoints = GameObject.FindGameObjectsWithTag("PigSpawnPoint");
-        InvokeRepeating("AttemptPigSpawn", 3f, 0.5f);
+        float time = Vars.GAME_LOADED_COUNT > 0 ? 3f : 13f;
+        InvokeRepeating("AttemptPigSpawn", time, 0.5f);
         
-        if (Vars.GAME_LOADED_COUNT < 0) { // TODO - change to == 0
+        if (Vars.GAME_LOADED_COUNT == 0) {
             startingPanel.SetActive(true);
             Invoke("HidePanel", 10f);
         } else {
@@ -108,18 +113,12 @@ public class GameController : MonoBehaviour {
             return;
         }
 
-        string path = "C:\\Games\\Plant Game\\Assets\\Scripts\\HighScore.txt";
-        StreamReader sr = new StreamReader(path);
-        string line = sr.ReadLine();
-        int previousBest = int.Parse(line);
-        sr.Close();
-
         finalMessageText.enabled = true;
         finalMessageTextBg.enabled = true;
-        if (pumpkinCount > previousBest) {
+        if (pumpkinCount > Vars.PREVIOUS_BEST) {
             finalMessageText.text = "Gz buddy. You beat your last score. Now go touch fucking grass or smth alneki idk...";
-            File.WriteAllText(path, pumpkinCount.ToString());
-        } else if (pumpkinCount < previousBest) {
+            Vars.PREVIOUS_BEST = pumpkinCount;
+        } else if (pumpkinCount < Vars.PREVIOUS_BEST) {
             finalMessageText.text = "Porazno model...nisi mogu zbolšat score-a u fucking pumpkin farmerju. Js bse zamislu.";
         } else {
             finalMessageText.text = "Upam da je blo vredn farmat za isti score k prej. Must be proud!";

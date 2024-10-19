@@ -2,14 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using TMPro;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 public class PlayerController : MonoBehaviour {
 
     public struct InventoryItem {
-        public byte count;
+        public uint count;
         public GameObject item;
+        public bool isInstantiated;
+        public bool isPermanent;
     }
     
     [Header ("General")]
@@ -19,7 +22,8 @@ public class PlayerController : MonoBehaviour {
     private float horizontalMove;
     public GameObject spawnPointLeftHand, spawnPointRightHand;
 
-    [Header("Available items")] public GameObject kangla;
+    [Header("Available items")] 
+    public GameObject kangla;
     public GameObject shit;
     public GameObject hoe;
     
@@ -28,14 +32,15 @@ public class PlayerController : MonoBehaviour {
     [HideInInspector]
     public string activeItemName = "";
 
+    public TextMeshPro itemCounter;
     private SpriteRenderer activeItemSpriteRenderer;
     
     // TODO - Should item have a general "properties" field, which would allow accesing custom item methods...E.g. MakeKanglaFull()??  
     public Dictionary<string, InventoryItem> inventory = new Dictionary<string, InventoryItem>();
 
     private void Awake() {
-        inventory.Add("kangla", new InventoryItem() { count = 1, item = kangla } );
-        inventory.Add("hoe", new InventoryItem() { count = 1, item = hoe } );
+        inventory.Add("kangla", new InventoryItem() { count = 0, item = kangla, isInstantiated = false, isPermanent = true} );
+        inventory.Add("hoe", new InventoryItem() { count = 1_000, item = hoe, isInstantiated = false, isPermanent = true} );
     }
 
     private void Start() {
@@ -44,7 +49,6 @@ public class PlayerController : MonoBehaviour {
             plant.GetComponent<PlantController>().player = gameObject;
             plant.GetComponent<PlantController>().playerController = this;
         }
-        // InvokeRepeating("PrintInventory", 1f, 2f);
     }
 
     private void Update() {
@@ -112,34 +116,34 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void EquipItem(string name) {
+
+        if (!inventory[name].isPermanent && inventory[name].count <= 0) return;
+        
         UnEquipItems();
-        if (horizontalMove <= 0) {
-            activeItem = Instantiate(inventory[name].item, spawnPointLeftHand.transform.position, Quaternion.identity, spawnPointLeftHand.transform);
+
+        if (inventory[name].isInstantiated) {
+            activeItem = inventory[name].item;
+            activeItem.SetActive(true);
         } else {
-            activeItem = Instantiate(inventory[name].item, spawnPointRightHand.transform.position, Quaternion.identity, spawnPointRightHand.transform);
+            if (horizontalMove <= 0) {
+                activeItem = Instantiate(inventory[name].item, spawnPointLeftHand.transform.position, Quaternion.identity, spawnPointLeftHand.transform);
+            } else {
+                activeItem = Instantiate(inventory[name].item, spawnPointRightHand.transform.position, Quaternion.identity, spawnPointRightHand.transform);
+            }
+            var item = inventory[name]; 
+            item.isInstantiated = true;
+            inventory[name] = item;
+            activeItem.AddComponent<ItemController>().name = name;
         }
+        itemCounter.text = inventory[name].count.ToString();
         activeItemName = name;
-        activeItem.AddComponent<ItemController>().name = name;
         activeItemSpriteRenderer = activeItem.GetComponent<SpriteRenderer>();
     }
 
-    private void UnEquipItems() {
+    public void UnEquipItems() {
         if (activeItem) {
-            // activeItem.SetActive(false);
-            Destroy(activeItem);
+            activeItem.SetActive(false);
+            ActiveItemInventoryUpdate();
         }
-    }
-
-    private void UseItem() {
-        
-    }
-
-    private void PrintInventory() {
-        string output = "";
-        foreach (var item in inventory) {
-            Debug.Log(item.Value.item.name);
-            output += $"{item.Value.item.name}: {item.Value.count}";
-        }
-        Debug.Log(output);
     }
 }

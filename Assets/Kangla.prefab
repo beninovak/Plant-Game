@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1508177720322291172}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -12.988852, y: 2.527966, z: 0}
   m_LocalScale: {x: 0.15, y: 0.15, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -48,6 +48,7 @@ MonoBehaviour:
   isFull: 0
   kanglaFull: {fileID: 950038934274304052, guid: 0d28bfc8a96b998469fe702b7bf38f20, type: 3}
   kanglaEmpty: {fileID: 1914849043038913832, guid: 80560c2bb29fd5d48ba43d03b71bf949, type: 3}
+  uses: 5
 --- !u!212 &6820422996333722007
 SpriteRenderer:
   m_ObjectHideFlags: 0

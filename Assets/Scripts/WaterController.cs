@@ -14,6 +14,10 @@ public class WaterController : MonoBehaviour {
             if (distanceFromPlayer <= 6f) { // Magic number
                 playerController.activeItem.GetComponent<KanglaController>().MakeKanglaFull();
                 playerController.ActiveItemInventoryUpdate();
+                var item = playerController.inventory["kangla"];
+                item.count = 5;
+                playerController.inventory["kangla"] = item;
+                playerController.itemCounter.text = "5";
             }
         }
     }

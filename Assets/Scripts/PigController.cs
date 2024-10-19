@@ -68,8 +68,12 @@ public class PigController : MonoBehaviour {
 
         if (playerController.activeItemName == "hoe") {
             float distanceToPlayer = Vector2.Distance(transform.position, playerController.gameObject.transform.position);
-            Debug.Log(distanceToPlayer);
             if (distanceToPlayer > 6f) return;
+
+            var temp = playerController.inventory["hoe"];
+            temp.count--;
+            playerController.inventory["hoe"] = temp;
+            playerController.itemCounter.text = temp.count.ToString();
             
             isDead = true;
             spriteRenderer.flipY = true;
